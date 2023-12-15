@@ -42,6 +42,10 @@ services:
       - LABEL_STUDIO_HOST=${LABEL_STUDIO_HOST:-}
       - JSON_LOG=1
       - LOG_LEVEL=DEBUG
+      - MINIO_STORAGE_ACCESS_KEY=${MINIO_ROOT_USER:-minio_admin_do_not_use_in_production}
+      - MINIO_STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD:-minio_admin_do_not_use_in_production}
+      - MINIO_STORAGE_BUCKET_NAME=data
+      - MINIO_STORAGE_ENDPOINT=http://minio:9000
     volumes:
       - /home/zhouli/docker/labeling_192/mydata:/label-studio/data:rw
     command: label-studio-uwsgi
@@ -50,6 +54,8 @@ services:
     image: postgres:11.5
     hostname: db
     restart: unless-stopped
+    ports:
+      - "5432:5432"
     # Optional: Enable TLS on PostgreSQL
     # Just drop your server.crt and server.key into folder 'deploy/pgsql/certs'
     # NOTE: Both files must have permissions u=rw (0600) or less
