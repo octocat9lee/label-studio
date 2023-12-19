@@ -2,7 +2,7 @@ version: "3.9"
 services:
   nginx:
     build: .
-    image: heartexlabs/label-studio:latest
+    image: heartexlabs/label-studio:1.9.2
     restart: unless-stopped
     ports:
       - "9080:8085"
@@ -26,7 +26,7 @@ services:
     stdin_open: true
     tty: true
     build: .
-    image: heartexlabs/label-studio:latest
+    image: heartexlabs/label-studio:1.9.2
     restart: unless-stopped
     expose:
       - "8000"
@@ -48,6 +48,7 @@ services:
       - MINIO_STORAGE_ENDPOINT=http://minio:9000
     volumes:
       - /home/zhouli/docker/labeling_192/mydata:/label-studio/data:rw
+      - /home/zhouli/labeling/label-studio/deploy/uwsgi.ini:/label-studio/deploy/uwsgi.ini:rw
     command: label-studio-uwsgi
 
   db:

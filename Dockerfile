@@ -39,6 +39,8 @@ RUN set -eux \
      --option APT::AutoRemove::SuggestsImportant=false && rm -rf /var/lib/apt/lists/* /tmp/*
 
 RUN --mount=type=cache,target=$PIP_CACHE_DIR,uid=1001,gid=0 \
+    pip3 config set global.index-url http://mirrors.aliyun.com/pypi/simple && \
+    pip3 config set install.trusted-host mirrors.aliyun.com && \
     pip3 install --upgrade pip setuptools && pip3 install uwsgi uwsgitop
 
 # incapsulate nginx install & configure to a single layer
