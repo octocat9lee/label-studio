@@ -84,9 +84,7 @@ SILENCED_SYSTEM_CHECKS = []
 HOSTNAME = get_env('HOST', '')
 if HOSTNAME:
     if not HOSTNAME.startswith('http://') and not HOSTNAME.startswith('https://'):
-        logger.info(
-            '! HOST variable found in environment, but it must start with http:// or https://, ignore it: %s', HOSTNAME
-        )
+        logger.info('! HOST variable found in environment, but it must start with http:// or https://, ignore it: %s', HOSTNAME)
         HOSTNAME = ''
     else:
         logger.info('=> Hostname correctly is set to: %s', HOSTNAME)
@@ -618,8 +616,8 @@ if get_env('MINIO_STORAGE_ENDPOINT') and not get_bool_env('MINIO_SKIP', False):
     AWS_QUERYSTRING_AUTH = False
     # make domain for FileUpload.file
     AWS_S3_SECURE_URLS = False
-    AWS_S3_URL_PROTOCOL = 'http:' if HOSTNAME.startswith('http://') else 'https:'
-    AWS_S3_CUSTOM_DOMAIN = HOSTNAME.replace('http://', '').replace('https://', '') + '/data'
+    AWS_S3_URL_PROTOCOL = 'http:' if AWS_S3_ENDPOINT_URL.startswith('http://') else 'https:'
+    AWS_S3_CUSTOM_DOMAIN = AWS_S3_ENDPOINT_URL.replace('http://', '').replace('https://', '') + '/data'
 
 if get_env('STORAGE_TYPE') == 's3':
     CLOUD_FILE_STORAGE_ENABLED = True
