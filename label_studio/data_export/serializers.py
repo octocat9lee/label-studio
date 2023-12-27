@@ -1,6 +1,8 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 from core.label_config import replace_task_data_undefined_with_config_field
+from core.utils.params import get_bool_env, get_env
+from core.settings.base import AWS_S3_ENDPOINT_URL, AWS_STORAGE_BUCKET_NAME
 from core.utils.common import load_func
 from data_export.models import DataExport
 from django.conf import settings
@@ -64,6 +66,12 @@ class BaseExportDataSerializer(FlexFieldsModelSerializer):
                 'interpolate_key_frames', False
             )
         replace_task_data_undefined_with_config_field(data, project)
+
+        if get_env('MINIO_STORAGE_ENDPOINT') and not get_bool_env('MINIO_SKIP', False):
+            task.data = {
+                k: f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/{v}' if isinstance(v, str) else v
+                for k, v in task.data.items()
+            }
 
         return super().to_representation(task)
 
